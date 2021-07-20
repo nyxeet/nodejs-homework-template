@@ -10,7 +10,7 @@ const schemaCreateContact = Joi.object({
 });
 const schemaUpdateContact = Joi.object({
   name: Joi.string().alphanum().min(2).max(30),
-  email: Joi.string().alphanum().min(2).max(30),
+  email: Joi.string().email(),
   phone: Joi.string(),
 });
 
