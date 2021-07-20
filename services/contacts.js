@@ -20,10 +20,15 @@ const remove = (id) => {
   return Contact.findByIdAndRemove({ _id: id });
 };
 
+const updateStatusContact = (id, body) => {
+  return Contact.findByIdAndUpdate({ _id: id }, body, { new: true });
+};
+
 module.exports = {
   list,
   getById,
   create,
   update,
   remove,
+  updateStatusContact,
 };

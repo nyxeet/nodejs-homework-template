@@ -110,4 +110,37 @@ const update = async (req, res, next) => {
   }
 };
 
-module.exports = { list, getById, create, remove, update };
+const patch = async (req, res, next) => {
+  if (!req.body) {
+    return next({
+      status: HttpCode.BAD_REQUEST,
+      message: "Missingfield favorite",
+      data: "Not Found",
+    });
+  }
+  try {
+    const contact = await Services.updateStatusContact(
+      ObjectId(req.params.contactId),
+      req.body
+    );
+    if (contact) {
+      res.status(HttpCode.OK).json({
+        status: "success",
+        code: HttpCode.OK,
+        data: {
+          contact,
+        },
+      });
+    } else {
+      return next({
+        status: HttpCode.NOT_FOUND,
+        message: "Not found contact",
+        data: "Not Found",
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { list, getById, create, remove, update, patch };

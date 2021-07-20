@@ -7,11 +7,19 @@ const schemaCreateContact = Joi.object({
   name: Joi.string().alphanum().min(2).max(30).required(),
   email: Joi.string().email().required(),
   phone: Joi.string().required(),
+  favorite: Joi.boolean(),
 });
 const schemaUpdateContact = Joi.object({
   name: Joi.string().alphanum().min(2).max(30),
   email: Joi.string().email(),
   phone: Joi.string(),
+  favorite: Joi.boolean(),
+});
+const schemaUpdateStatusContact = Joi.object({
+  name: Joi.string().alphanum().min(2).max(30),
+  email: Joi.string().email(),
+  phone: Joi.string(),
+  favorite: Joi.boolean().required(),
 });
 
 const validate = (schema, body, next) => {
@@ -33,4 +41,7 @@ module.exports.validateCreateContact = (req, res, next) => {
 };
 module.exports.validateUpdateContact = (req, res, next) => {
   return validate(schemaUpdateContact, req.body, next);
+};
+module.exports.validateUpdateStatusContact = (req, res, next) => {
+  return validate(schemaUpdateStatusContact, req.body, next);
 };
