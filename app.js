@@ -5,6 +5,8 @@ const logger = require("morgan");
 const cors = require("cors");
 const { HttpCode } = require("./helpers/constants");
 const contactsRouter = require("./routes/api/contacts");
+const authRouter = require("./routes/api/auth");
+const userRouter = require("./routes/api/users");
 
 const app = express();
 
@@ -15,6 +17,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/users", userRouter);
 
 app.use((req, res, next) => {
   console.log(req);
