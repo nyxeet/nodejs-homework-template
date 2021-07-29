@@ -5,15 +5,17 @@ const list = async () => {
 };
 
 const getById = (id) => {
-  return Contact.findOne({ _id: id });
+  return Contact.findOne({ _id: id, owner: userId });
 };
 
-const create = (body) => {
-  return Contact.create(body);
+const create = (body, userId) => {
+  return Contact.create({ ...body, owner: userId });
 };
 
-const update = (id, fields) => {
-  return Contact.findByIdAndUpdate({ _id: id }, fields, { new: true });
+const update = (id, fields, userId) => {
+  return Contact.findByIdAndUpdate({ _id: id, owner: userId }, fields, {
+    new: true,
+  });
 };
 
 const remove = (id) => {

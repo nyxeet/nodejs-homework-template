@@ -7,6 +7,7 @@ const { HttpCode } = require("./helpers/constants");
 const contactsRouter = require("./routes/api/contacts");
 const authRouter = require("./routes/api/auth");
 const userRouter = require("./routes/api/users");
+require("./config/passport");
 
 const app = express();
 

@@ -4,24 +4,33 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const register = async (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, subscription, token } = req.body;
   try {
     const result = await Services.getOne({ email });
 
     if (result) {
-      res.status(409).json({
-        status: "success",
-        code: 409,
+      res.status(HttpCode.CONFLICT).json({
+        status: "error",
+        code: HttpCode.CONFLICT,
         message: "Already register",
       });
     }
+    const newUser = await Services.add({
+      email,
+      password,
+      subscription,
+      token,
+    });
 
-    await Services.add({ email, password });
-
-    res.status(201).json({
+    res.status(HttpCode.CREATED).json({
       status: "success",
-      code: 201,
+      code: HttpCode.CREATED,
       message: "Success register",
+      data: {
+        id: newUser.id,
+        email: newUser.email,
+        subscription: newUser.subscription,
+      },
     });
   } catch (e) {
     next(e);
@@ -32,9 +41,9 @@ const login = async (req, res, next) => {
   try {
     const user = await Services.getOne({ email });
     if (!user || !user.validPassword(password)) {
-      res.status(400).json({
+      res.status(HttpCode.BAD_REQUEST).json({
         status: "error",
-        code: 400,
+        code: HttpCode.BAD_REQUEST,
         message: "Wrong email or password",
       });
     }
@@ -43,9 +52,10 @@ const login = async (req, res, next) => {
       id: user._id,
     };
     const token = jwt.sign(payload, SECRET_KEY);
+    await Services.updateById(user._id, { token });
     res.json({
       status: "success",
-      code: "200",
+      code: HttpCode.OK,
       data: {
         token,
       },
@@ -54,5 +64,19 @@ const login = async (req, res, next) => {
     next(e);
   }
 };
+const logout = async (req, res, next) => {
+  const { email, password } = req.body;
+  try {
+    const { _id } = req.user;
+    await Services.updateById(_id, { token: null });
+    res.json({
+      status: "success",
+      code: HttpCode.OK,
+      message: "success logout",
+    });
+  } catch (e) {
+    next(e);
+  }
+};
 
-module.exports = { register, login };
+module.exports = { register, login, logout };

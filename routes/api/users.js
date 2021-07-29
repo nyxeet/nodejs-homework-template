@@ -3,7 +3,8 @@
 const express = require("express");
 const router = express.Router();
 const Controller = require("../../controllers/user");
+const jwtAuthenticate = require("../../middlewares/auth");
 
-router.get("/profile", Controller.getProfile);
+router.get("/profile", jwtAuthenticate, Controller.getProfile);
 
 module.exports = router;
