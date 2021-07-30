@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const register = async (req, res, next) => {
-  const { email, password, subscription, token } = req.body;
+  const { email, password, subscription } = req.body;
   try {
     const result = await Services.getOne({ email });
 
@@ -12,14 +12,13 @@ const register = async (req, res, next) => {
       res.status(HttpCode.CONFLICT).json({
         status: "error",
         code: HttpCode.CONFLICT,
-        message: "Already register",
+        message: "Email in use",
       });
     }
     const newUser = await Services.add({
       email,
       password,
       subscription,
-      token,
     });
 
     res.status(HttpCode.CREATED).json({
@@ -65,13 +64,13 @@ const login = async (req, res, next) => {
   }
 };
 const logout = async (req, res, next) => {
-  const { email, password } = req.body;
   try {
     const { _id } = req.user;
-    await Services.updateById(_id, { token: null });
+    const user = await Services.getById(_id);
+    await Services.updateById(user._id, { token: null });
     res.json({
       status: "success",
-      code: HttpCode.OK,
+      code: 204,
       message: "success logout",
     });
   } catch (e) {

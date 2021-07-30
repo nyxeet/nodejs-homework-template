@@ -4,7 +4,7 @@ const { ObjectId } = require("mongodb");
 
 const list = async (req, res, next) => {
   try {
-    const contacts = await Services.list();
+    const contacts = await Services.list(req.user._id);
     res.status(HttpCode.OK).json({
       status: "success",
       code: HttpCode.OK,
@@ -18,8 +18,12 @@ const list = async (req, res, next) => {
 };
 
 const getById = async (req, res, next) => {
+  console.log(req.user._id);
   try {
-    const contact = await Services.getById(ObjectId(req.params.contactId));
+    const contact = await Services.getById(
+      ObjectId(req.params.contactId),
+      req.user._id
+    );
     if (contact) {
       res.status(HttpCode.OK).json({
         status: "success",
@@ -41,7 +45,7 @@ const getById = async (req, res, next) => {
 };
 const create = async (req, res, next) => {
   try {
-    const contact = await Services.create(req.body);
+    const contact = await Services.create(req.body, req.user._id);
     res.status(HttpCode.CREATED).json({
       status: "success",
       code: HttpCode.CREATED,
@@ -56,7 +60,10 @@ const create = async (req, res, next) => {
 
 const remove = async (req, res, next) => {
   try {
-    const contact = await Services.remove(ObjectId(req.params.contactId));
+    const contact = await Services.remove(
+      ObjectId(req.params.contactId),
+      req.user._id
+    );
     if (contact) {
       res.status(HttpCode.OK).json({
         status: "success",
@@ -88,7 +95,8 @@ const update = async (req, res, next) => {
   try {
     const contact = await Services.update(
       ObjectId(req.params.contactId),
-      req.body
+      req.body,
+      req.user._id
     );
     if (contact) {
       res.status(HttpCode.OK).json({
@@ -121,7 +129,8 @@ const patch = async (req, res, next) => {
   try {
     const contact = await Services.updateStatusContact(
       ObjectId(req.params.contactId),
-      req.body
+      req.body,
+      req.user._id
     );
     if (contact) {
       res.status(HttpCode.OK).json({

@@ -6,7 +6,7 @@ const jwtAuthenticate = (req, res, next) => {
       return res.status(401).json({
         status: "error",
         code: 401,
-        message: "Unauthorize",
+        message: "Not authorized",
       });
     }
     req.user = user;

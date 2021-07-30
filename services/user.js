@@ -15,7 +15,6 @@ const add = ({ email, password, subscription, token }) => {
   const newUser = new User({ email, subscription, token });
   newUser.setPassword(password);
   return newUser.save();
-  // User.create(newUser);
 };
 const updateById = (id, body) => {
   return User.findByIdAndUpdate(id, body, { new: true });
