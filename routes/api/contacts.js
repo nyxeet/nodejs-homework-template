@@ -3,7 +3,6 @@
 const express = require("express");
 const router = express.Router();
 const Controller = require("../../controllers/contacts");
-const passport = require("passport");
 const jwtAuthenticate = require("../../middlewares/auth");
 const {
   validateCreateContact,

@@ -3,7 +3,6 @@
 const express = require("express");
 const router = express.Router();
 const jwtAuthenticate = require("../../middlewares/auth");
-
 const Controller = require("../../controllers/auth");
 const {
   validateRegisterUser,
