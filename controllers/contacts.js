@@ -18,7 +18,6 @@ const list = async (req, res, next) => {
 };
 
 const getById = async (req, res, next) => {
-  console.log(req.user._id);
   try {
     const contact = await Services.getById(
       ObjectId(req.params.contactId),
