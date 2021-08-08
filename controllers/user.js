@@ -20,8 +20,8 @@ const updateAvatar = async (req, res, next) => {
   const { id, email } = req.user;
   if (req.file) {
     const { file } = req;
-    const img = await jimp.read(file.path);
-    await img
+    const avatar = await jimp.read(file.path);
+    await avatar
       .cover(
         250,
         250,
@@ -40,12 +40,19 @@ const updateAvatar = async (req, res, next) => {
     );
     const user = await Services.updateById(id, { avatarURL });
     res.json({
-      message: "Файл успешно загружен",
+      message: "Avatar successfully updated",
       status: "success",
       code: 200,
       data: {
         avatarURL: user.avatarURL,
       },
+    });
+  } else {
+    res.json({
+      message: "File is not exist",
+      status: "error",
+      code: 404,
+      data: "Not found",
     });
   }
 };
