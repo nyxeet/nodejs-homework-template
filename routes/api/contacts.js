@@ -3,19 +3,26 @@
 const express = require("express");
 const router = express.Router();
 const Controller = require("../../controllers/contacts");
+const jwtAuthenticate = require("../../middlewares/auth");
 const {
   validateCreateContact,
   validateUpdateContact,
   validateUpdateStatusContact,
 } = require("../../validation/contacts");
 
-router.get("/", Controller.list);
-router.get("/:contactId", Controller.getById);
-router.post("/", validateCreateContact, Controller.create);
-router.delete("/:contactId", Controller.remove);
-router.put("/:contactId", validateUpdateContact, Controller.update);
+router.get("/", jwtAuthenticate, Controller.list);
+router.get("/:contactId", jwtAuthenticate, Controller.getById);
+router.post("/", jwtAuthenticate, validateCreateContact, Controller.create);
+router.delete("/:contactId", jwtAuthenticate, Controller.remove);
+router.put(
+  "/:contactId",
+  jwtAuthenticate,
+  validateUpdateContact,
+  Controller.update
+);
 router.patch(
   "/:contactId/favorite",
+  jwtAuthenticate,
   validateUpdateStatusContact,
   Controller.patch
 );
