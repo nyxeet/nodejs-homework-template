@@ -12,5 +12,7 @@ const {
 router.post("/logout", jwtAuthenticate, Controller.logout);
 router.post("/signup", validateRegisterUser, Controller.register);
 router.post("/login", validateLoginUser, Controller.login);
+router.get("/verify/:verificationToken", Controller.verify);
+router.post("/verify", Controller.repeatVerification);
 
 module.exports = router;
